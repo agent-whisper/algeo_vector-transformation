@@ -1,0 +1,32 @@
+1. Program
+	1. Set Up OpenGL
+		1. Output
+		2. Proses banyak titik
+	2. UI
+		1. Proses input dari command prompt
+	3. Modul transformasi
+		1. translate
+		2. dilate
+		3. rotate
+		4. reflect
+
+		5. shear
+		6. strect
+		7. custom
+		8. reset
+
+		9. exit 
+		10. multiple
+		
+2. Laporan
+	1. Cover
+	2. Deskripsi (tinggal kopas)
+	3. Teori singkat
+	4. Implementasi program + pembagian tugas
+	5. Eksperimen
+	6. Kesimpulan dan saran
+	7. Referensi
+
+3. Bonus
+	1. Program bisa transformasi linier 3D
+	2. Program bisa menampilkan animasi transformasi
