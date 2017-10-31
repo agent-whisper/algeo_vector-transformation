@@ -1,0 +1,10 @@
+git clone <alamat>
+
+git status
+
+git add .
+git commit -m "Pesan"
+
+git pull origin master
+
+git push origin master
