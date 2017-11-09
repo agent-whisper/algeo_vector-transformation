@@ -44,6 +44,20 @@ print ('Lets start!\n\n')
 #
 #     return (coords)
 
+# def reset(segi,coords,initcoords):
+#     for z in range(segi):
+#         coords[z].x = initcoords[z].x
+#         coords[z].y = initcoords[z].y
+#     return (coords)
+
+# def reset(segi,coords,initcoords):
+#     for i in range(segi):
+#         for j in range(len(coords[i])):
+#             coords[i][j] = initcoords[i][j]
+#             coords[i][j] = initcoords[i][j]
+#
+#     return(initcoords[:])
+
 def translate(dx,dy):
     global coords
     transformation = [[1, 0, 0],[0,1,0],[dx,dy,1]]
@@ -63,72 +77,193 @@ def rotate(deg,a,b):
 
     coords = multiplyMatrix(multiplyMatrix(multiplyMatrix(p1, baseTransformation), p2), coords)
 
+def reflectX(x):
+    if (x > 0):
+        translate(0, -x)
+    elif(x < 0):
+        translate(0, x)
+    global coords
+    transformation = [[1, 0, 0],[0, -1, 0],[0,0,1]]
+    coords = multiplyMatrix(transformation, coords)
 
-def reflect(segi,coords, x, y):
+    if (x > 0):
+        translate(0, x)
+    elif (x < 0):
+        translate(0, -x)
 
-    return coords
+def reflectY(x):
+    if (x > 0):
+        translate(-x, 0)
+    elif(x < 0):
+        translate(x, 0)
+    global coords
+    transformation = [[-1, 0, 0],[0, 1, 0],[0,0,1]]
+    coords = multiplyMatrix(transformation, coords)
 
-def shear(segi,coords,axis,k):
+    if (x > 0):
+        translate(x, 0)
+    elif (x < 0):
+        translate(-x, 0)
 
-    return(coords)
 
-def stretch(segi,coords,param,k):
+def reflect(x, y):
+    global coords
+    reflectX(x)
+    reflectY(y)
 
-    return(coords)
+def shear(axis, m):
+    global coords
+    if (axis == "y" or axis == "Y"):
+        transformation = [[1, m, 0], [0,1,0],[0,0,1]]
+        coords = multiplyMatrix(transformation, coords)
+    elif (axis == "x" or axis == "X"):
+        transformation = [[1, 0, 0], [m, 1, 0], [0, 0, 1]]
+        coords = multiplyMatrix(transformation, coords)
+    else:
+        print("Error: invalid axis")
 
-def custom(segi,coords,a,b,c,d):
+def stretch(axis, k):
+    global coords
+    if (axis == "y" or axis == "Y"):
+        transformation = [[1, 0, 0], [0, k, 0], [0, 0, 1]]
+        coords = multiplyMatrix(transformation, coords)
+    elif (axis == "x" or axis == "X"):
+        transformation = [[k, 0, 0], [0, 1, 0], [0, 0, 1]]
+        coords = multiplyMatrix(transformation, coords)
+    else:
+        print("Error: invalid axis")
 
-    return(coords)
+def custom(a,b,c,d):
+    global coords
+    transformation = [[a,c,0],[b,d,0],[0,0,1]]
+    coords = multiplyMatrix(transformation, coords)
 
-def multiple(segi,coords,n):
-    for z in range(n):
-        operate(segi,coords)
-    return(coords)
+def multiple():
+    global segi
+    global coords
+    global initcoords
 
-# def reset(segi,coords,initcoords):
-#     for z in range(segi):
-#         coords[z].x = initcoords[z].x
-#         coords[z].y = initcoords[z].y
-#     return (coords)
+    n = int(input("Number of command > "))
 
-def reset(segi,coords,initcoords):
-    for i in range(segi):
-        for j in range(len(coords[i])):
-            coords[i][j] = initcoords[i][j]
-            coords[i][j] = initcoords[i][j]
+    op = []
+    for i in range(n):
+        cmd = input("Command " + str(i) + " : ")
+        if cmd == "multiple":
+            print("Cannot do multiple command inside a multiple command")
+        else:
+            op += [cmd]
 
-    return(initcoords[:])
+    for i in op:
+        opr = []
+        for field in i.split():
+            opr.append(field)
+        wrongCommand = False
+
+        if opr[0] == "translate":
+            if (len(opr) == 3):
+                (translate(float(opr[1]), float(opr[2])))  # (dx, dy)
+            else:
+                wrongCommand = True
+        elif opr[0] == "dilate":
+            if (len(opr) == 2):
+                dilate(float(opr[1]))
+            else:
+                wrongCommand = True
+        elif opr[0] == "rotate":
+            if len(opr) == 4:
+                rotate(float(opr[1]), float(opr[2]), float(opr[3]))  # (deg, x, y)
+            else:
+                wrongCommand = True
+        elif opr[0] == "reflect":
+            if len(opr) == 3:
+                reflect(float(opr[1]), float(opr[2]))  # (x, y)
+            else:
+                wrongCommand = True
+        elif opr[0] == "shear":
+            if len(opr) == 3:
+                shear(opr[1], float(opr[2]))  # (axis, factor)
+            else:
+                wrongCommand = True
+        elif opr[0] == "stretch":
+            if len(opr) == 3:
+                stretch(opr[1], float(opr[2]))  # (axis, factor)
+            else:
+                wrongCommand = True
+        elif opr[0] == "custom":
+            if len(opr) == 5:
+                custom(int(opr[1]), int(opr[2]), int(opr[3]), int(opr[4]))
+            else:
+                wrongCommand = True
+
+        elif opr[0] == "multiple":
+            multiple()
+        elif opr[0] == "reset":
+            coords = reset(initcoords)
+        elif opr[0] == "exit":
+            sys.exit()
+        else:
+            print("Maaf, masukan operasi salah")
+
+        if wrongCommand:
+            print("Error: not enough arguments")
+
+def reset(initcoords):
+    global coords
+    coords = deepcopy(initcoords)
 
 def operate(segi,coords, initcoords):
     opr = []
     operation = input("Masukkan operasi yang ingin dilakukan: ")#.split()
     for field in operation.split():
         opr.append(field)
-
+    wrongCommand = False
 
     if opr[0] == "translate":
-        # coords = (translate(segi,coords,int(opr[1]),int(opr[2])))
-        (translate(int(opr[1]), int(opr[2])))
+        if (len(opr) == 3):
+            (translate(float(opr[1]), float(opr[2]))) #(dx, dy)
+        else:
+            wrongCommand = True
     elif opr[0] == "dilate":
-        coords = dilate(float(opr[1]))
+        if (len(opr) == 2):
+            dilate(float(opr[1]))
+        else:
+            wrongCommand = True
     elif opr[0] == "rotate":
-        coords = rotate(int(opr[1]),int(opr[2]),int(opr[3]))
+        if len(opr) == 4:
+            rotate(float(opr[1]), float(opr[2]), float(opr[3])) #(deg, x, y)
+        else:
+            wrongCommand = True
     elif opr[0] == "reflect":
-        coords = reflect(segi,coords,int(opr[1]),int(opr[2]))
+        if len(opr) == 3:
+            reflect(float(opr[1]), float(opr[2])) #(x, y)
+        else:
+            wrongCommand = True
     elif opr[0] == "shear":
-        coords = shear(segi,coords,opr[1],int(opr[2]))
+        if len(opr) == 3:
+            shear(opr[1], float(opr[2])) #(axis, factor)
+        else:
+            wrongCommand = True
     elif opr[0] == "stretch":
-        coords = stretch(segi,coords,opr[1],int(opr[2]))
+        if len(opr) == 3:
+            stretch(opr[1],float(opr[2])) #(axis, factor)
+        else:
+            wrongCommand = True
     elif opr[0] == "custom":
-        coords = custom(segi,coords,int(opr[1]),int(opr[2]),int(opr[3]),int(opr[4]))
+        if len(opr) == 5:
+            custom(int(opr[1]),int(opr[2]),int(opr[3]),int(opr[4]))
+        else:
+            wrongCommand = True
     elif opr[0] == "multiple":
-        coords = multiple(segi,coords,int(opr[1]))
+        multiple()
     elif opr[0] == "reset":
-        coords = reset(segi,coords,initcoords)
+        reset(initcoords)
     elif opr[0] == "exit":
         sys.exit()
     else:
         print ("Maaf, masukan operasi salah")
+
+    if wrongCommand:
+        print("Error: not enough arguments")
 
 #Class yang menyimpan pasangan koordinat(x,y), akan digunakan pada array of vertex
 class Vertex:
