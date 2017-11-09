@@ -11,53 +11,6 @@ from copy import *
 
 print ('Lets start!\n\n')
 
-# def convertVertexToList(segi, v):
-#     aColum ={None]}
-#     for z in range(segi):
-
-
-# def translate(segi,coords,dx,dy):
-# 	for z in range(segi):
-# 		coords[z].x += dx
-# 		coords[z].y += dy
-# 	return (coords)
-#
-# def dilate(segi,coords,k):
-#     for z in range(segi):
-#         coords[z].x *= k
-#         coords[z].y *= k
-#     return (coords)
-
-# def translate(segi,coords,dx,dy):
-#     for i in range(segi):
-#         for j in range(len(coords[i])):
-#             coords[i][j] += dx
-#             coords[i][j] += dy
-#
-#     return (coords)
-
-# def dilate(segi,coords,k):
-#     for i in range(segi):
-#         for j in range(len(coords[i])):
-#             coords[i][j] *= k
-#             coords[i][j] *= k
-#
-#     return (coords)
-
-# def reset(segi,coords,initcoords):
-#     for z in range(segi):
-#         coords[z].x = initcoords[z].x
-#         coords[z].y = initcoords[z].y
-#     return (coords)
-
-# def reset(segi,coords,initcoords):
-#     for i in range(segi):
-#         for j in range(len(coords[i])):
-#             coords[i][j] = initcoords[i][j]
-#             coords[i][j] = initcoords[i][j]
-#
-#     return(initcoords[:])
-
 def translate(dx,dy):
     global coords
     transformation = [[1, 0, 0],[0,1,0],[dx,dy,1]]
@@ -266,10 +219,42 @@ def operate(segi,coords, initcoords):
         print("Error: not enough arguments")
 
 #Class yang menyimpan pasangan koordinat(x,y), akan digunakan pada array of vertex
-class Vertex:
-    def __init__(self,x,y):
-        self.x = x
-        self.y = y
+# class Vertex:
+#     def __init__(self,x,y):
+#         self.x = x
+#         self.y = y
+
+def drawShape(segi, coords):
+    glBegin(GL_LINE_LOOP)  # start drawing a rectangle
+    for z in range(segi):
+        glVertex3f(coords[z][0], coords[z][1], 0)  # bottom left point
+    glEnd()
+
+
+def refresh2d(width, height):
+    glViewport(0, 0, width, height)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    glOrtho(0.0, width, 0.0, height, 0.0, 1.0)
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+
+
+def draw():  # ondraw is called all the time
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)  # clear the screen
+    glLoadIdentity()  # reset position
+    refresh2d(width, height)  # set mode to 2d
+
+    glColor3f(0.0, 0.0, 1.0)  # set color to blue
+    drawShape(segi, coords)  # rect at (10, 10) with width 200, height 100
+    # glBegin(GL_POLYGON)
+    glutSwapBuffers()  # important for double buffering
+
+#==================================================================================================
+#==================================================================================================
+#==================================================================================================
+
+
 
 #Meminta masukan jumlah vertex (yang menentukan segi berapa)
 segi = int(input("Masukkan segi berapa yang ingin diolah: "))
@@ -290,30 +275,6 @@ initcoords = deepcopy(coords)
 window = 0                                             # glut window number
 width, height = 500, 500                               # window size
 
-def drawShape(segi, coords):
-    glBegin(GL_LINE_LOOP)     	                             # start drawing a rectangle
-    for z in range(segi):	
-        glVertex3f(coords[z][0], coords[z][1], 0)                                   # bottom left point
-    glEnd() 
-
-def refresh2d(width, height):
-    glViewport(0, 0, width, height)
-    glMatrixMode(GL_PROJECTION)
-    glLoadIdentity()
-    glOrtho(0.0, width, 0.0, height, 0.0, 1.0)
-    glMatrixMode (GL_MODELVIEW)
-    glLoadIdentity()
-
-def draw():                                            # ondraw is called all the time
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) # clear the screen
-    glLoadIdentity()                                   # reset position
-    refresh2d(width, height)                           # set mode to 2d
-        
-    glColor3f(0.0, 0.0, 1.0)                           # set color to blue
-    drawShape(segi,coords)	                           # rect at (10, 10) with width 200, height 100
-    # glBegin(GL_POLYGON)
-    glutSwapBuffers()                                  # important for double buffering
-
 # initialization
 glutInit()                                             # initialize glut
 glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH)
@@ -329,3 +290,51 @@ while(loop):
     operate(segi,coords, initcoords)
     print(coords)
     draw()
+
+
+# def convertVertexToList(segi, v):
+#     aColum ={None]}
+#     for z in range(segi):
+
+
+# def translate(segi,coords,dx,dy):
+# 	for z in range(segi):
+# 		coords[z].x += dx
+# 		coords[z].y += dy
+# 	return (coords)
+#
+# def dilate(segi,coords,k):
+#     for z in range(segi):
+#         coords[z].x *= k
+#         coords[z].y *= k
+#     return (coords)
+
+# def translate(segi,coords,dx,dy):
+#     for i in range(segi):
+#         for j in range(len(coords[i])):
+#             coords[i][j] += dx
+#             coords[i][j] += dy
+#
+#     return (coords)
+
+# def dilate(segi,coords,k):
+#     for i in range(segi):
+#         for j in range(len(coords[i])):
+#             coords[i][j] *= k
+#             coords[i][j] *= k
+#
+#     return (coords)
+
+# def reset(segi,coords,initcoords):
+#     for z in range(segi):
+#         coords[z].x = initcoords[z].x
+#         coords[z].y = initcoords[z].y
+#     return (coords)
+
+# def reset(segi,coords,initcoords):
+#     for i in range(segi):
+#         for j in range(len(coords[i])):
+#             coords[i][j] = initcoords[i][j]
+#             coords[i][j] = initcoords[i][j]
+#
+#     return(initcoords[:])
