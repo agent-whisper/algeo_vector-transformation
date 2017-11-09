@@ -19,11 +19,62 @@ def dilate(segi,coords,k):
 		coords[z].y *= k
 	return (coords)
 
+def rotate(segi,coords,deg,a,b):
+
+	return(coords)
+
+def reflect(segi,coords,param):
+
+	return(coords)
+
+def shear(segi,coords,param,k):
+
+	return(coords)
+
+def custom(segi,coords,a,b,c,d):
+
+	return(coords)
+
+def multiple(segi,coords,n):
+	for z in range(n):
+		operate(segi,coords)
+	return(coords)
+
 def reset(segi,coords,initcoords):
 	for z in range(segi):
 		coords[z].x = initcoords[z].x
 		coords[z].y = initcoords[z].y
 	return (coords)
+
+def operate(segi,coords):
+	opr = []
+	operation = raw_input("Masukkan operasi yang ingin dilakukan: ")#.split()
+	for field in operation.split():
+		opr.append(field)
+
+
+	if opr[0] == "translate":
+		coords = translate(segi,coords,int(opr[1]),int(opr[2]))
+	elif opr[0] == "dilate":
+		coords = dilate(segi,coords,float(opr[1]))
+	elif opr[0] == "rotate":
+		coords = rotate(segi,coords,int(opr[1]),int(opr[2]),int(opr[3]))
+	elif opr[0] == "reflect":
+		coords = reflect(segi,coords,int(opr[1]),int(opr[2]))
+	elif opr[0] == "shear":
+		coords = shear(segi,coords,opr[1],int(opr[2]))
+	elif opr[0] == "stretch":
+		coords = stretch(segi,coords,opr[1],int(opr[2]))
+	elif opr[0] == "custom":
+		coords = custom(segi,coords,int(opr[1]),int(opr[2]),int(opr[3]),int(opr[4]))
+	elif opr[0] == "multiple":
+		coords = multiple(segi,coords,int(opr[1]))
+	elif opr[0] == "reset":
+		coords = reset(segi,coords,initcoords)
+	elif opr[0] == "exit":
+		sys.exit()
+	else:
+		print "Maaf, masukan operasi salah"
 
 #Class yang menyimpan pasangan koordinat(x,y), akan digunakan pada array of vertex
 class Vertex:
@@ -80,41 +131,10 @@ glutInitWindowSize(width, height)                      # set window size
 glutInitWindowPosition(0, 0)                           # set window position
 window = glutCreateWindow("AllGeo")              	   # create window with title
 draw()
-#glutDisplayFunc(draw)                                  # set draw function callback
-#glutIdleFunc(draw)                                     # draw all the time
-#glutMainLoop()                                         # start everything
 
 #Melakukan operasi
 loop = True
 
 while(loop):
-	opr = []
-	operation = raw_input("Masukkan operasi yang ingin dilakukan: ")#.split()
-	for field in operation.split():
-		opr.append(field)
-
-
-	if opr[0] == "translate":
-		coords = translate(segi,coords,int(opr[1]),int(opr[2]))
-	elif opr[0] == "dilate":
-		coords = dilate(segi,coords,float(opr[1]))
-	elif opr[0] == "rotate":
-		coords = rotate(segi,coords,int(opr[1]),int(opr[2]),int(opr[3]))
-	elif opr[0] == "reflect":
-		coords = reflect(segi,coords,int(opr[1]),int(opr[2]))
-	elif opr[0] == "shear":
-		coords = shear(segi,coords,opr[1],int(opr[2]))
-	elif opr[0] == "stretch":
-		coords = stretch(segi,coords,opr[1],int(opr[2]))
-	elif opr[0] == "custom":
-		coords = custom(segi,coords,int(opr[1]),int(opr[2]),int(opr[3]),int(opr[4]))
-	elif opr[0] == "multiple":
-		coords = multiple(segi,coords,int(opr[1]))
-	elif opr[0] == "reset":
-		coords = reset(segi,coords,initcoords)
-	elif opr[0] == "exit":
-		sys.exit()
-	else:
-		print "Maaf, masukan operasi salah"
-
+	operate(segi,coords)
 	draw()
