@@ -28,33 +28,47 @@ print ('Lets start!\n\n')
 #         coords[z].y *= k
 #     return (coords)
 
-def translate(segi,coords,dx,dy):
-    for i in range(segi):
-        for j in range(len(coords[i])):
-            coords[i][j] += dx
-            coords[i][j] += dy
+# def translate(segi,coords,dx,dy):
+#     for i in range(segi):
+#         for j in range(len(coords[i])):
+#             coords[i][j] += dx
+#             coords[i][j] += dy
+#
+#     return (coords)
 
-    return (coords)
+# def dilate(segi,coords,k):
+#     for i in range(segi):
+#         for j in range(len(coords[i])):
+#             coords[i][j] *= k
+#             coords[i][j] *= k
+#
+#     return (coords)
 
-def dilate(segi,coords,k):
-    for i in range(segi):
-        for j in range(len(coords[i])):
-            coords[i][j] *= k
-            coords[i][j] *= k
+def translate(dx,dy):
+    global coords
+    transformation = [[1, 0, 0],[0,1,0],[dx,dy,1]]
+    coords = multiplyMatrix(transformation, coords)
 
-    return (coords)
+def dilate(k):
+    global coords
+    transformation = [[k, 0, 0],[0,k,0],[0,0,1]]
+    coords = multiplyMatrix(transformation,coords)
 
-def rotate(segi,coords,deg,a,b):
-    temp1 = translate(segi, coords, -a, -b)[:]
-    transMatrix = [[cosine(deg), sinus(deg)], [-sinus(deg), cosine(deg)]]
-    temp2 = multiplyMatrix(transMatrix, temp1)[:]
-    c = translate(segi, temp2, a, b)[:]
-    return(c)
+def rotate(deg,a,b):
+    global coords
+
+    baseTransformation = [[cosine(deg), sinus(deg), 0], [-sinus(deg), cosine(deg), 0], [0,0,1]]
+    p1 = [[1,0,0],[0,1,0],[a,b,1]]
+    p2 = [[1, 0, 0], [0, 1, 0], [-a, -b, 1]]
+
+    coords = multiplyMatrix(multiplyMatrix(multiplyMatrix(p1, baseTransformation), p2), coords)
+
 
 def reflect(segi,coords, x, y):
 
     return coords
-def shear(segi,coords,param,k):
+
+def shear(segi,coords,axis,k):
 
     return(coords)
 
@@ -93,11 +107,12 @@ def operate(segi,coords, initcoords):
 
 
     if opr[0] == "translate":
-        coords = translate(segi,coords,int(opr[1]),int(opr[2]))
+        # coords = (translate(segi,coords,int(opr[1]),int(opr[2])))
+        (translate(int(opr[1]), int(opr[2])))
     elif opr[0] == "dilate":
-        coords = dilate(segi,coords,float(opr[1]))
+        coords = dilate(float(opr[1]))
     elif opr[0] == "rotate":
-        coords = rotate(segi,coords,int(opr[1]),int(opr[2]),int(opr[3]))
+        coords = rotate(int(opr[1]),int(opr[2]),int(opr[3]))
     elif opr[0] == "reflect":
         coords = reflect(segi,coords,int(opr[1]),int(opr[2]))
     elif opr[0] == "shear":
@@ -128,7 +143,7 @@ segi = int(input("Masukkan segi berapa yang ingin diolah: "))
 coords = [None]*segi
 for z in range(segi):
     x,y = map(int,input("Masukkan koordinat ke "+ str(z) +": ").split(', '))
-    coords[z] = [x, y]
+    coords[z] = [x, y, 1]
 
 print(coords)
 # initcoords = [None]*segi
