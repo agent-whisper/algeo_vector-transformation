@@ -4,9 +4,11 @@ from OpenGL.GLU import *
 from math import *
 from numpy import *
 from sys import *
-from math import cos, sin
+from math import cos as cosine
+from math import sin as sinus
+from matrix import *
 
-print 'Lets start!\n\n'
+print ('Lets start!\n\n')
 
 def translate(segi,coords,dx,dy):
 	for z in range(segi):
@@ -21,14 +23,19 @@ def dilate(segi,coords,k):
 	return (coords)
 
 def rotate(segi,coords,deg,a,b):
-
-	return(coords)
+    transMatrix = [[cosine(deg), sinus(deg)], [-sinus(deg), cosine(deg)]]
+    c = multiplyMatrix(transMatrix, coords)
+    return(c)
 
 def reflect(segi,coords,param):
 
 	return(coords)
 
 def shear(segi,coords,param,k):
+
+	return(coords)
+
+def stretch(segi,coords,param,k):
 
 	return(coords)
 
@@ -75,7 +82,7 @@ def operate(segi,coords):
 	elif opr[0] == "exit":
 		sys.exit()
 	else:
-		print "Maaf, masukan operasi salah"
+		print ("Maaf, masukan operasi salah")
 
 #Class yang menyimpan pasangan koordinat(x,y), akan digunakan pada array of vertex
 class Vertex:
@@ -121,8 +128,8 @@ def draw():                                            # ondraw is called all th
     refresh2d(width, height)                           # set mode to 2d
         
     glColor3f(0.0, 0.0, 1.0)                           # set color to blue
-    drawShape(segi,coords)	                           # rect at (10, 10) with width 200, height 100
-    
+    # drawShape(segi,coords)	                           # rect at (10, 10) with width 200, height 100
+    glBegin(GL_POLYGON)
     glutSwapBuffers()                                  # important for double buffering
 
 # initialization
@@ -130,7 +137,7 @@ glutInit()                                             # initialize glut
 glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH)
 glutInitWindowSize(width, height)                      # set window size
 glutInitWindowPosition(0, 0)                           # set window position
-window = glutCreateWindow("AllGeo")              	   # create window with title
+window = glutCreateWindow(b"AllGeo")              	   # create window with title
 draw()
 
 #Melakukan operasi
