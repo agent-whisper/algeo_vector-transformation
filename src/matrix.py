@@ -22,7 +22,6 @@ def multiplyMatrix(m1, m2):
             sum = 0
             for k in range(inBetween):
                 sum += m1[k][i] * m2[j][k]
-            print("sum = " + str(sum))
             temp.setValue(sum, i, j)
 
     result = temp.matrix[:]
