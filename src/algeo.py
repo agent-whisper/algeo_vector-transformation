@@ -25,44 +25,57 @@ def rotate(deg,a,b):
     global coords
 
     baseTransformation = [[cosine(deg), sinus(deg), 0], [-sinus(deg), cosine(deg), 0], [0,0,1]]
-    p1 = [[1,0,0],[0,1,0],[a,b,1]]
-    p2 = [[1, 0, 0], [0, 1, 0], [-a, -b, 1]]
+    p1 = [[1,0,0],[0,1,0],[a + 249,b + 249,1]]
+    p2 = [[1, 0, 0], [0, 1, 0], [-a -249, -b - 249, 1]]
 
     coords = multiplyMatrix(multiplyMatrix(multiplyMatrix(p1, baseTransformation), p2), coords)
 
 def reflectX(x):
-    if (x > 0):
-        translate(0, -x)
-    elif(x < 0):
-        translate(0, x)
+    t = x + 249
+    if (t > 249):
+        translate(0, -t)
+    elif(t +0< 249):
+        translate(0, t+0)
+    else:
+        return
     global coords
     transformation = [[1, 0, 0],[0, -1, 0],[0,0,1]]
     coords = multiplyMatrix(transformation, coords)
 
-    if (x > 0):
-        translate(0, x)
-    elif (x < 0):
-        translate(0, -x)
+    if (t +0> 249):
+        translate(0, t+0)
+    elif (t +0< 249):
+        translate(0, -t+0)
 
-def reflectY(x):
-    if (x > 0):
-        translate(-x, 0)
-    elif(x < 0):
-        translate(x, 0)
+def reflectY(t):
+    t = t + 249
+    if (t + 0 > 249):
+        translate(-t+0, 0)
+    elif(t + 0< 249):
+        translate(t-0, 0)
+    else:
+        return
     global coords
     transformation = [[-1, 0, 0],[0, 1, 0],[0,0,1]]
     coords = multiplyMatrix(transformation, coords)
 
-    if (x > 0):
-        translate(x, 0)
-    elif (x < 0):
-        translate(-x, 0)
+    if (t +0 > 249):
+        translate(t-0, 0)
+    elif (t +0 < 249):
+        translate(-t+0, 0)
 
 
 def reflect(x, y):
     global coords
+
+    if (x == 0 and y == 0):
+        t = [[-1,0,0],[0,-1,0],[0,0,1]]
+        coords = multiplyMatrix(t, coords)
+        translate(2 * 249, 2 * 249)
+        return
     reflectX(x)
     reflectY(y)
+
 
 def shear(axis, m):
     global coords
@@ -247,6 +260,10 @@ def draw():  # ondraw is called all the time
 
     glColor3f(0.0, 0.0, 1.0)  # set color to blue
     drawShape(segi, coords)  # rect at (10, 10) with width 200, height 100
+
+    glColor3f(1.0, 0.0, 0.0)  # set color to blue
+    drawShape(2, [[0,250,1],[499,250,1]])
+    drawShape(2, [[250, 0, 1], [250, 499, 1]])
     # glBegin(GL_POLYGON)
     glutSwapBuffers()  # important for double buffering
 
@@ -262,10 +279,13 @@ segi = int(input("Masukkan segi berapa yang ingin diolah: "))
 #Inisialisasi array of vertex & meminta input koordinat bidang
 coords = [None]*segi
 for z in range(segi):
-    x,y = map(int,input("Masukkan koordinat ke "+ str(z) +": ").split(', '))
-    coords[z] = [x, y, 1]
+    x = int(input("Masukkan koordinat x untuk simpul "+ str(z) +": "))
+    y = int(input("Masukkan koordinat y untuk simpul "+ str(z) +": "))
+    coords[z] = [x + 249, y + 249, 1]
 
-print(coords)
+# print(coords)
+for v in coords:
+    print(" [" + str(v[0]-249) + "," + str(v[1]-249) + "] "),
 # initcoords = [None]*segi
 # for z in range(segi):
 # 	initcoords[z] = Vertex(coords[z].x,coords[z].y)
@@ -288,7 +308,8 @@ loop = True
 
 while(loop):
     operate(segi,coords, initcoords)
-    print(coords)
+    for v in coords:
+        print(" [" + str(v[0] - 249) + "," + str(v[1] - 249) + "] "),
     draw()
 
 
