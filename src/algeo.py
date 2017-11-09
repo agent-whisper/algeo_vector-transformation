@@ -4,6 +4,7 @@ from OpenGL.GLU import *
 from math import *
 from numpy import *
 from sys import *
+from math import cos, sin
 
 print 'Lets start!\n\n'
 
@@ -48,7 +49,7 @@ def reset(segi,coords,initcoords):
 
 def operate(segi,coords):
 	opr = []
-	operation = raw_input("Masukkan operasi yang ingin dilakukan: ")#.split()
+	operation = input("Masukkan operasi yang ingin dilakukan: ")#.split()
 	for field in operation.split():
 		opr.append(field)
 
@@ -83,12 +84,12 @@ class Vertex:
 		self.y = y
 
 #Meminta masukan jumlah vertex (yang menentukan segi berapa)
-segi = int(raw_input("Masukkan segi berapa yang ingin diolah: "))
+segi = int(input("Masukkan segi berapa yang ingin diolah: "))
 
 #Inisialisasi array of vertex & meminta input koordinat bidang
 coords = [None]*segi
 for z in range(segi):
-	x,y = map(int,raw_input("Masukkan koordinat ke "+ str(z) +": ").split(', '))
+	x,y = map(int,input("Masukkan koordinat ke "+ str(z) +": ").split(', '))
 	coords[z] = Vertex(x,y)
 
 initcoords = [None]*segi
