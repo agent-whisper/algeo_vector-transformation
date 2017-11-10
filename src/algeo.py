@@ -80,10 +80,10 @@ def reflect(x, y):
 def shear(axis, m):
     global coords
     if (axis == "y" or axis == "Y"):
-        transformation = [[1, m, 0], [0,1,0],[0,0,1]]
+        transformation = [[1, m, 0], [0,1,0],[0,0,-249]*m]
         coords = multiplyMatrix(transformation, coords)
     elif (axis == "x" or axis == "X"):
-        transformation = [[1, 0, 0], [m, 1, 0], [0, 0, 1]]
+        transformation = [[1, 0, 0], [m, 1, 0], [0, 0, -249*m]]
         coords = multiplyMatrix(transformation, coords)
     else:
         print("Error: invalid axis")
@@ -258,7 +258,7 @@ def draw():  # ondraw is called all the time
     glLoadIdentity()  # reset position
     refresh2d(width, height)  # set mode to 2d
 
-    glColor3f(0.0, 0.0, 1.0)  # set color to blue
+    glColor3f(1.0, 1.0, 1.0)  # set color to blue
     drawShape(segi, coords)  # rect at (10, 10) with width 200, height 100
 
     glColor3f(1.0, 0.0, 0.0)  # set color to blue
